@@ -1,0 +1,9 @@
+## Architecture
+
+Under `Wexample\SymfonyMonitoringDs\` (PSR-4 on `src/`), the shape of symfony-remote-ds:
+
+- {{ path("src/Controller/Pages/MonitoringController.php") }}, the pages: the list reads symfony-monitoring's `IncidentRepository` (`findByStatuses()`, `countByStatuses()`, `countPerStatus()` for the filter's counts) and `HeartbeatService::getStates()`; the incident page, one incident.
+- {{ path("src/Api/Controller/IncidentController.php") }}, the decision: the body is {{ path("src/Api/Dto/DecideIncidentDto.php") }}, validated by symfony-api's `#[ValidateRequestContent]` before the method runs; the decision goes to `IncidentService`.
+- {{ path("src/Security/MonitoringAccessVoter.php") }} grants both to the configured role, so the controllers name one attribute.
+
+The assets: `pages/monitoring/index` and `pages/monitoring/incident` — the latter's script posts the decision with its note and reloads —, and `partials/markers.html.twig`, the macros drawing an incident's status, severity and source the same way on both pages, in the design system's markers.

@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Wexample\SymfonyMonitoringDs\Security\:
+        resource: '../../Security/'
+
+    Wexample\SymfonyMonitoringDs\Controller\:
+        resource: '../../Controller/'
+        tags: ['controller.service_arguments']
+
+    Wexample\SymfonyMonitoringDs\Api\Controller\:
+        resource: '../../Api/Controller/'
+        tags: ['controller.service_arguments']

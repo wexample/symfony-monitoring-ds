@@ -1,0 +1,86 @@
+{%- extends '@front/layouts/private/layout.html.twig' -%}
+{%- import '@WexampleSymfonyMonitoringDsBundle/partials/markers.html.twig' as markers -%}
+
+{%- set page_show_title = true -%}
+
+{#- The incidents, the active ones unless the filter says otherwise, the last
+    seen first, each leading to its page; then the heartbeats, late or not. -#}
+{%- block page_body -%}
+    {%- set common = 'WexampleSymfonyMonitoringDsBundle.common.monitoring::' -%}
+
+    <section class="block block--card">
+        <div class="block--body stack--vertical">
+            <h2>{{ '@page::incidents' | trans }}</h2>
+
+            {%- set status_options = [
+                { value: 'active', label: '@page::filter.active' | trans, count: counts.open + counts.acknowledged },
+            ] -%}
+            {%- for status in statuses -%}
+                {%- set status_options = status_options | merge([{ value: status.value, label: (common ~ 'status.' ~ status.value) | trans, count: counts[status.value] }]) -%}
+            {%- endfor -%}
+            {%- set status_options = status_options | merge([{ value: 'all', label: '@page::filter.all' | trans }]) -%}
+
+            {%- set rows = [] -%}
+            {%- for incident in incidents -%}
+                {%- set code_cell -%}
+                    {{ text_link(path('monitoring_incident_show', { id: incident.id }), incident.code) }}
+                    {%- if incident.occurrences > 1 %} <span class="text-secondary">{{ '@page::occurrences' | trans({ '%count%': incident.occurrences }) }}</span>{% endif -%}
+                {%- endset -%}
+                {%- set rows = rows | merge([{
+                    last_seen: date_display(incident.lastSeenAt, 'date_time_short'),
+                    source: markers.source(incident),
+                    code: code_cell,
+                    severity: markers.severity(incident.severity),
+                    status: markers.status(incident.status),
+                    message: incident.message | e,
+                }]) -%}
+            {%- endfor -%}
+
+            {{ data_table([
+                { key: 'last_seen', label: '@page::column.last_seen' | trans, cell: 'html', class: 'table--cell--nowrap' },
+                { key: 'source', label: '@page::column.source' | trans, cell: 'html' },
+                { key: 'code', label: '@page::column.code' | trans, cell: 'html' },
+                { key: 'severity', label: '@page::column.severity' | trans, cell: 'html', class: 'table--cell--nowrap' },
+                { key: 'status', label: '@page::column.status' | trans, cell: 'html', class: 'table--cell--nowrap' },
+                { key: 'message', label: '@page::column.message' | trans, cell: 'html', secondary: true },
+            ], rows, {
+                filters: [{ key: 'status', label: '@page::filter.status' | trans, options: status_options }],
+                empty_label: '@page::empty' | trans,
+                hover: true,
+            }) }}
+
+            {{ pagination(page, pages_count, { hide_single: true }) }}
+        </div>
+    </section>
+
+    {%- if heartbeats is not empty -%}
+        <section class="block block--card">
+            <div class="block--body stack--vertical">
+                <h2>{{ '@page::heartbeats.title' | trans }}</h2>
+
+                {%- set rows = [] -%}
+                {%- for key, heartbeat in heartbeats -%}
+                    {%- set heartbeat_cell -%}
+                        <span class="text-strong">{{ heartbeat.definition.label }}</span>
+                        <span class="monitoring--key text-secondary"><code>{{ key }}</code></span>
+                    {%- endset -%}
+                    {%- set rows = rows | merge([{
+                        heartbeat: heartbeat_cell,
+                        state: heartbeat.late
+                            ? marker('error', '@page::heartbeats.late' | trans, { compact: true })
+                            : marker('success', '@page::heartbeats.on_time' | trans, { compact: true }),
+                        last_success: heartbeat.lastSuccessAt ? date_display(heartbeat.lastSuccessAt, 'date_time_short') : ('@page::heartbeats.never' | trans),
+                        last_failure: heartbeat.lastFailureAt ? date_display(heartbeat.lastFailureAt, 'date_time_short') : '',
+                    }]) -%}
+                {%- endfor -%}
+
+                {{ data_table([
+                    { key: 'heartbeat', label: '@page::heartbeats.column.heartbeat' | trans, cell: 'html' },
+                    { key: 'state', label: '@page::heartbeats.column.state' | trans, cell: 'html', class: 'table--cell--nowrap' },
+                    { key: 'last_success', label: '@page::heartbeats.column.last_success' | trans, cell: 'html', class: 'table--cell--nowrap' },
+                    { key: 'last_failure', label: '@page::heartbeats.column.last_failure' | trans, cell: 'html', class: 'table--cell--nowrap' },
+                ], rows, { hover: true }) }}
+            </div>
+        </section>
+    {%- endif -%}
+{%- endblock -%}

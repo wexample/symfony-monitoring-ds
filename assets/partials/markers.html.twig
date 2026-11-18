@@ -1,0 +1,14 @@
+{#- The markers of an incident, shared by the list and the page: its status and
+    its severity, each in the design system's tone for it. -#}
+{%- macro status(status) -%}
+    {%- set tones = { open: 'error', acknowledged: 'running', resolved: 'success', ignored: 'skipped' } -%}
+    {{- marker(tones[status.value], ('WexampleSymfonyMonitoringDsBundle.common.monitoring::status.' ~ status.value) | trans, { compact: true }) -}}
+{%- endmacro -%}
+{%- macro severity(severity) -%}
+    {{- marker(severity.value, ('WexampleSymfonyMonitoringDsBundle.common.monitoring::severity.' ~ severity.value) | trans, { compact: true }) -}}
+{%- endmacro -%}
+{%- macro source(incident) -%}
+    {%- set id = 'WexampleSymfonyMonitoringDsBundle.common.monitoring::source.' ~ incident.sourceType -%}
+    {%- set type = id | trans -%}
+    <span class="text-secondary">{{ type == id ? incident.sourceType : type }}</span> <code>{{ incident.sourceKey }}</code>
+{%- endmacro -%}

@@ -1,0 +1,62 @@
+{%- extends '@front/layouts/private/layout.html.twig' -%}
+{%- import '@WexampleSymfonyMonitoringDsBundle/partials/markers.html.twig' as markers -%}
+
+{%- set page_show_title = true -%}
+
+{#- One incident: what it is, how often it happened, what was decided about it,
+    and the decisions left to take, each with a note. -#}
+{%- block page_body -%}
+    {%- set by = incident.statusChangedBy -%}
+    {%- set context -%}
+        {%- for key, value in incident.context -%}
+            <span class="text-secondary">{{ key }}</span> {{ value }}{% if not loop.last %} · {% endif %}
+        {%- endfor -%}
+    {%- endset -%}
+
+    <section class="block block--card">
+        <div class="block--body stack--vertical">
+            {{ button_link('ph:bold/arrow-left', '@page::back' | trans, path('monitoring_index'), { class: 'button--flat' }) }}
+
+            {{ properties([
+                { key: '@page::property.status' | trans, value: markers.status(incident.status), html: true },
+                { key: '@page::property.severity' | trans, value: markers.severity(incident.severity), html: true },
+                { key: '@page::property.source' | trans, value: markers.source(incident), html: true },
+                { key: '@page::property.code' | trans, value: incident.code, code: true },
+                { key: '@page::property.message' | trans, value: incident.message, full: true, break: true },
+                { key: '@page::property.context' | trans, value: context, html: true, full: true },
+                { key: '@page::property.occurrences' | trans, value: incident.occurrences },
+                { key: '@page::property.reopenings' | trans, value: incident.reopenings },
+                { key: '@page::property.first_seen' | trans, value: date_display(incident.firstSeenAt, 'date_time_short'), html: true },
+                { key: '@page::property.last_seen' | trans, value: date_display(incident.lastSeenAt, 'date_time_short'), html: true },
+                { key: '@page::property.status_changed' | trans, value: incident.statusChangedAt ? date_display(incident.statusChangedAt, 'date_time_short') : null, html: true },
+                { key: '@page::property.status_changed_by' | trans, value: by ? (by.displayName ?? by.email ?? by.id) : null },
+                { key: '@page::property.note' | trans, value: incident.note, full: true, break: true },
+            ]) }}
+        </div>
+    </section>
+
+    <section class="block block--card monitoring--decide" data-incident-id="{{ incident.id }}">
+        <div class="block--body stack--vertical">
+            <h2>{{ '@page::decide.title' | trans }}</h2>
+
+            <div class="form--group">
+                <label class="form--label" for="monitoring-note">{{ '@page::decide.note' | trans }}</label>
+                <textarea class="form--input monitoring--note" id="monitoring-note" rows="3" maxlength="2000"></textarea>
+            </div>
+
+            <div class="cluster">
+                {%- set decisions = {
+                    acknowledge: { icon: 'ph:bold/hand', status: 'acknowledged' },
+                    resolve: { icon: 'ph:bold/check', status: 'resolved' },
+                    ignore: { icon: 'ph:bold/eye-slash', status: 'ignored' },
+                } -%}
+                {%- for decision, outcome in decisions -%}
+                    {#- A decision already standing is not offered again. -#}
+                    {%- if incident.status.value != outcome.status -%}
+                        {{ button(outcome.icon, ('@page::decide.' ~ decision) | trans, { class: 'monitoring--decision' ~ (decision == 'resolve' ? ' button--invert' : ''), 'data-decision': decision }) }}
+                    {%- endif -%}
+                {%- endfor -%}
+            </div>
+        </div>
+    </section>
+{%- endblock -%}

@@ -1,0 +1,56 @@
+en:
+  page_title: Monitoring
+  page_icon: ph:bold/heartbeat
+  incidents: Incidents
+  empty: No incident.
+  filter:
+    status: Status
+    active: Active
+    all: All
+  column:
+    last_seen: Last seen
+    source: Source
+    code: Code
+    severity: Severity
+    status: Status
+    message: Message
+  occurrences: '×%count%'
+  heartbeats:
+    title: Heartbeats
+    every: 'every %every%'
+    never: Never
+    late: Late
+    on_time: On time
+    column:
+      heartbeat: Heartbeat
+      state: State
+      last_success: Last success
+      last_failure: Last failure
+fr:
+  page_title: Supervision
+  page_icon: ph:bold/heartbeat
+  incidents: Incidents
+  empty: Aucun incident.
+  filter:
+    status: Statut
+    active: Actifs
+    all: Tous
+  column:
+    last_seen: Vu la dernière fois
+    source: Source
+    code: Code
+    severity: Gravité
+    status: Statut
+    message: Message
+  occurrences: '×%count%'
+  heartbeats:
+    title: Tâches planifiées
+    every: 'toutes les %every%'
+    never: Jamais
+    late: En retard
+    on_time: À l'heure
+    column:
+      heartbeat: Tâche
+      state: État
+      last_success: Dernier succès
+      last_failure: Dernier échec

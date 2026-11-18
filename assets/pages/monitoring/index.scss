@@ -1,0 +1,14 @@
+// The monitoring screen: a card of incidents — their filter, their markers,
+// their pages — and a card of heartbeats.
+@use '@wexample/symfony-design-system/css/shapes/block';
+@use '@wexample/symfony-design-system/css/shapes/stack';
+@use '@wexample/symfony-design-system/components/marker/marker';
+@use '@wexample/symfony-design-system/components/date-display/date-display';
+@use '@wexample/symfony-design-system/components/data-table/data-table';
+@use '@wexample/symfony-design-system/components/filter-bar/filter-bar';
+@use '@wexample/symfony-design-system/components/pagination/pagination';
+
+// The key under the label: what the heartbeat is called in the code.
+.monitoring--key {
+  display: block;
+}

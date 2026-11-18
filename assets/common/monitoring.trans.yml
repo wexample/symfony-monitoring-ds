@@ -1,0 +1,26 @@
+en:
+  status:
+    open: Open
+    acknowledged: Acknowledged
+    resolved: Resolved
+    ignored: Ignored
+  severity:
+    info: Info
+    warning: Warning
+    error: Error
+  source:
+    remote: Remote
+    heartbeat: Heartbeat
+fr:
+  status:
+    open: Ouvert
+    acknowledged: Pris en compte
+    resolved: Résolu
+    ignored: Ignoré
+  severity:
+    info: Info
+    warning: Avertissement
+    error: Erreur
+  source:
+    remote: Source distante
+    heartbeat: Tâche planifiée

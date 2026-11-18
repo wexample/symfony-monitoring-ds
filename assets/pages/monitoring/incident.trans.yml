@@ -1,0 +1,48 @@
+en:
+  page_title: Incident
+  page_icon: ph:bold/warning-octagon
+  back: All the incidents
+  property:
+    status: Status
+    severity: Severity
+    source: Source
+    code: Code
+    message: Message
+    context: Context
+    occurrences: Occurrences
+    reopenings: Came back
+    first_seen: First seen
+    last_seen: Last seen
+    status_changed: Status changed
+    status_changed_by: By
+    note: Note
+  decide:
+    title: Decide
+    note: Note
+    acknowledge: Acknowledge
+    resolve: Resolve
+    ignore: Ignore
+fr:
+  page_title: Incident
+  page_icon: ph:bold/warning-octagon
+  back: Tous les incidents
+  property:
+    status: Statut
+    severity: Gravité
+    source: Source
+    code: Code
+    message: Message
+    context: Contexte
+    occurrences: Occurrences
+    reopenings: Retours
+    first_seen: Vu la première fois
+    last_seen: Vu la dernière fois
+    status_changed: Statut changé
+    status_changed_by: Par
+    note: Note
+  decide:
+    title: Décider
+    note: Note
+    acknowledge: Prendre en compte
+    resolve: Résoudre
+    ignore: Ignorer
