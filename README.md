@@ -1,6 +1,6 @@
 # symfony-monitoring-ds
 
-Version: 2.0.9
+Version: 2.0.10
 
 Design-system screens of symfony-monitoring: the incidents and their decisions, the heartbeats
 
